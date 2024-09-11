@@ -1,10 +1,36 @@
 /* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
 import React from 'react'
-
 import convertTime from '../../../utils/convertTiime'
+import { BASE_URL, token } from './../../config'
+import { toast } from 'react-toastify'
 
 const SlidePanel = ({doctorId, ticketPrice, timeSlots}) => {
+
+  const bookingHandler = async()=>{
+    try {
+      const res = await fetch(`${BASE_URL}/bookings/checkout-session/${doctorId}`,{
+        method:'post',
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+
+      const data = await res.json()
+      
+      if(!res.ok){
+        throw new Error(data.message + 'Please try again')
+      }
+
+      if(data.session.url){
+        window.location.href = data.session.url
+      }
+
+    } catch (err) {
+      toast.error(err.message)
+    }
+  }
+
   return (
     <div className='shadow-panelShadow p-3 lg:p-5 rounded-md'>
       <div className='flex items-center justify-between'>
@@ -32,7 +58,7 @@ const SlidePanel = ({doctorId, ticketPrice, timeSlots}) => {
           
         </ul>
       </div>
-      <button className='btn px-2 w-full rounded-md'> Book Appointment</button>
+      <button onClick={bookingHandler} className='btn px-2 w-full rounded-md'> Book Appointment</button>
     </div>
   )
 }
