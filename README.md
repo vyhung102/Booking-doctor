@@ -1,37 +1,53 @@
-1. MongoDB Atlas:
-MongoDB Atlas là một dịch vụ cơ sở dữ liệu đám mây, được sử dụng để lưu trữ dữ liệu người dùng và giao dịch. Trong dự án này, MongoDB Atlas sẽ lưu trữ:
+# Hệ Thống Tích Hợp Thanh Toán Sử Dụng MongoDB, Stripe, Express.js, Node.js và JWT
 
-Thông tin người dùng (email, tên, mật khẩu đã mã hóa, vai trò...).
-Dữ liệu về các giao dịch, đơn hàng, chi tiết thanh toán từ Stripe.
-Dữ liệu sản phẩm hoặc dịch vụ liên quan đến thanh toán.
-Mongoose thường được dùng để kết nối và làm việc với MongoDB trong Node.js.
+## Tổng Quan
+Dự án này là một hệ thống tích hợp thanh toán sử dụng **MongoDB Atlas** làm cơ sở dữ liệu, **Stripe** để xử lý thanh toán, và được xây dựng trên nền tảng **Express.js**, **Node.js**, kết hợp với **JWT** để xác thực người dùng và tích hợp API. Hệ thống cung cấp cách thức bảo mật và hiệu quả để quản lý tài khoản người dùng, xử lý thanh toán và lấy dữ liệu từ cơ sở dữ liệu.
 
-2. Stripe:
-Stripe là dịch vụ thanh toán trực tuyến, hỗ trợ xử lý các giao dịch thẻ tín dụng một cách an toàn. Trong dự án này:
+## Tính Năng Chính
+- **MongoDB Atlas**: Lưu trữ dữ liệu người dùng và giao dịch.
+- **Stripe**: Tích hợp API để xử lý thanh toán trực tuyến.
+- **Express.js**: Framework giúp xây dựng các API RESTful.
+- **Node.js**: Môi trường chạy server-side cho ứng dụng.
+- **JWT**: Xác thực người dùng an toàn và phân quyền truy cập.
 
-Stripe API sẽ được tích hợp để nhận thanh toán từ người dùng.
-Stripe xử lý các giao dịch thanh toán, xác thực thông tin thẻ tín dụng và gửi lại phản hồi thành công hoặc thất bại.
-Các webhook từ Stripe sẽ được sử dụng để cập nhật trạng thái giao dịch trong cơ sở dữ liệu MongoDB khi có thay đổi.
-3. Express.js:
-Express.js là framework nhẹ giúp tạo các REST API trên Node.js. Trong dự án này, Express được dùng để tạo các route (đường dẫn) cho các chức năng:
+## Công Nghệ Sử Dụng
+- **MongoDB Atlas**: Cơ sở dữ liệu NoSQL trên đám mây, dùng để lưu trữ thông tin người dùng và chi tiết giao dịch.
+- **Stripe**: Cổng thanh toán trực tuyến để xử lý các giao dịch thẻ tín dụng một cách an toàn.
+- **Express.js**: Framework nhẹ giúp xây dựng các API RESTful để quản lý thanh toán và xác thực người dùng.
+- **Node.js**: Môi trường JavaScript để xây dựng các ứng dụng phía server.
+- **JWT (JSON Web Token)**: Được sử dụng để xác thực và quản lý phiên đăng nhập một cách an toàn.
 
-Xác thực người dùng: Đăng ký, đăng nhập sử dụng JWT.
-Quản lý thanh toán: Tạo đơn hàng, gọi đến Stripe API để xử lý thanh toán.
-Lấy dữ liệu: Fetching dữ liệu từ MongoDB như lịch sử giao dịch, thông tin tài khoản, trạng thái đơn hàng.
-4. Node.js:
-Node.js là môi trường runtime cho dự án này. Dự án sử dụng Node.js để xử lý các yêu cầu API, quản lý cơ sở dữ liệu và tương tác với Stripe API. Một số vai trò chính:
+## Cách Hoạt Động
+1. **Xác Thực Người Dùng**: 
+   - Người dùng có thể đăng ký hoặc đăng nhập bằng phương thức xác thực JWT.
+   - Sau khi đăng nhập thành công, người dùng sẽ nhận được một **JWT token** để thực hiện các yêu cầu API tiếp theo.
 
-Tạo các API backend cho các thao tác thanh toán, quản lý người dùng.
-Xử lý các webhook từ Stripe khi có sự kiện giao dịch xảy ra (như thanh toán thành công, thất bại).
-Tương tác với MongoDB để lưu và lấy dữ liệu.
-5. JWT (JSON Web Token):
-JWT được sử dụng cho cơ chế xác thực và phân quyền trong dự án. Người dùng khi đăng nhập thành công sẽ nhận được JWT token, sau đó token này được dùng để:
+2. **Xử Lý Thanh Toán**:
+   - Người dùng chọn sản phẩm hoặc dịch vụ và tiến hành thanh toán qua Stripe.
+   - API sẽ gửi yêu cầu đến Stripe để xử lý thanh toán.
+   - Stripe phản hồi trạng thái thanh toán (thành công hoặc thất bại) và chi tiết giao dịch sẽ được lưu vào MongoDB.
 
-Xác thực người dùng trong các yêu cầu API tiếp theo.
-Bảo vệ các route quan trọng, chỉ cho phép những người dùng đã xác thực truy cập.
-6. API Integration & Data Fetching:
-Dự án sẽ có các REST API để quản lý thanh toán, lấy dữ liệu từ MongoDB và trả về cho người dùng.
-Ví dụ:
-POST /payment: Gửi yêu cầu thanh toán đến Stripe.
-GET /transactions: Lấy dữ liệu về các giao dịch của người dùng từ MongoDB.
-Các API sẽ lấy dữ liệu từ MongoDB, xử lý qua Express, và trả về cho người dùng dưới dạng JSON.
+3. **Lấy Dữ Liệu**:
+   - Hệ thống cung cấp các API RESTful để người dùng lấy lịch sử giao dịch và kiểm tra trạng thái đơn hàng.
+   - Tất cả dữ liệu được lấy từ MongoDB một cách an toàn.
+
+## API Endpoints
+- **POST /auth/login**: Đăng nhập và nhận JWT token.
+- **POST /auth/register**: Đăng ký tài khoản mới.
+- **POST /payment**: Tạo yêu cầu thanh toán và xử lý qua Stripe.
+- **GET /transactions**: Lấy lịch sử giao dịch của người dùng từ MongoDB.
+## Cài Đặt
+
+1. Clone repository:
+   ```bash
+   git clone https://github.com/your-username/payment-integration-system.git
+   cd payment-integration-system
+2. cài đặt phụ thuộc
+  npm install
+3.thết lập môi trường file .env
+MONGODB_URI=your_mongodb_atlas_uri
+STRIPE_SECRET_KEY=your_stripe_secret_key
+JWT_SECRET=your_jwt_secret_key
+4. chạy dự án
+npm run dev
+
